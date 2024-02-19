@@ -22,7 +22,7 @@ searchForm.addEventListener('submit', async function (event) {
 
   try {
     const response = await axios.get(
-      `https://api.unsplash.com/search/photos?query=${queryInput}&client_id=42444504-9067092ee8fdaf17c241a1e97`
+      `https://api.unsplash.com/search/photos?query=${queryInput}&client_id=42404284-d1db8811507a6ab98b0e3f497`
     );
     const { results } = response.data;
 

@@ -7,7 +7,7 @@ const BASE_URL = 'https://pixabay.com/api/';
 
 async function fetchImages(q) {
   const searchParams = new URLSearchParams({
-    key: '42444504-9067092ee8fdaf17c241a1e97',
+    key: '42404284-d1db8811507a6ab98b0e3f497',
     q,
     image_type: 'photo',
     orientation: 'horizontal',
