@@ -4,6 +4,7 @@ import axios from 'axios';
 import { createGallery } from './js/render-functions';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import { fetchImages, GALLERY_LINK } from './js/pixabay-api';
 
 const galleryContainer = document.querySelector('#gallery');
 const searchForm = document.querySelector('.search-form');
@@ -37,7 +38,6 @@ searchForm.addEventListener('submit', async function (event) {
       const lightbox = new SimpleLightbox(`.${GALLERY_LINK}`);
       lightbox.refresh();
     } else {
-      // Если свойство `hits` не существует или пусто, показываем сообщение о том, что результаты не найдены
       noResultsMessage.style.display = 'block';
     }
   } catch (error) {
