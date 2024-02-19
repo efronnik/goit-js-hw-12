@@ -140,6 +140,7 @@ button:hover {
   background-color: #6c8cff;
   transform: scale(1.05);
 }
+
 .gallery {
   list-style: none;
   display: grid;
@@ -267,4 +268,9 @@ figure {
   position: absolute;
   top: 20px;
   right: 50px;
+}
+
+#loadMoreBtn {
+  display: block;
+  margin: 20px auto;
 }

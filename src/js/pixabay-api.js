@@ -14,7 +14,8 @@ async function fetchImages(q) {
     safeSearch: true,
   });
 
-  const url = `${BASE_URL}?${searchParams}`;
+  const PARAMS = `?${searchParams}`;
+  const url = BASE_URL + PARAMS;
 
   try {
     const response = await axios.get(url);
