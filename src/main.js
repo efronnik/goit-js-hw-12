@@ -13,8 +13,41 @@ const endMessage = document.getElementById('endMessage');
 let currentPage = 1;
 let queryInput = '';
 
-const galleryCardHeight =
-  galleryContainer.firstElementChild.getBoundingClientRect().height;
+function clearGallery() {
+  galleryContainer.innerHTML = '';
+}
+
+function hideLoadMoreButton() {
+  loadMoreBtn.style.display = 'none';
+}
+
+function showLoadMoreButton() {
+  loadMoreBtn.style.display = 'block';
+}
+
+function hideEndMessage() {
+  endMessage.style.display = 'none';
+}
+
+function showEndMessage() {
+  endMessage.style.display = 'block';
+}
+
+function showLoader() {
+  loaderContainer.style.display = 'inline-block';
+}
+
+function hideLoader() {
+  loaderContainer.style.display = 'none';
+}
+
+function showErrorMessage(message) {
+  iziToast.info({
+    title: 'Information',
+    message: message,
+    position: 'topRight',
+  });
+}
 
 searchForm.addEventListener('submit', async function (event) {
   event.preventDefault();
@@ -24,27 +57,30 @@ searchForm.addEventListener('submit', async function (event) {
     return;
   }
 
-  loaderContainer.style.display = 'block';
+  currentPage = 1;
+
+  clearGallery();
+  hideEndMessage();
+  showLoader();
 
   try {
     const { data } = await axios.get(
       `https://pixabay.com/api/?key=42404284-d1db8811507a6ab98b0e3f497&q=${queryInput}&image_type=photo&orientation=horizontal&safeSearch=true&page=${currentPage}&per_page=15`
     );
-    const { hits } = data;
+
+    const { hits, totalHits } = data;
 
     if (hits.length > 0) {
       const galleryHTML = hits.map(createGallery).join('');
       galleryContainer.innerHTML = galleryHTML;
       const lightbox = new SimpleLightbox(`.${GALLERY_LINK}`);
       lightbox.refresh();
-      currentPage++;
-      loadMoreBtn.style.display = 'block';
+      showLoadMoreButton();
     } else {
-      iziToast.info({
-        title: 'Information',
-        message: `Sorry, there are no images matching your search query. Please try again!`,
-        position: 'topRight',
-      });
+      showErrorMessage(
+        `Sorry, there are no images matching your search query. Please try again!`
+      );
+      hideLoadMoreButton();
     }
   } catch (error) {
     console.error('Error fetching images:', error);
@@ -54,18 +90,19 @@ searchForm.addEventListener('submit', async function (event) {
       position: 'topRight',
     });
   } finally {
-    loaderContainer.style.display = 'none';
+    hideLoader();
     searchForm.reset();
   }
 });
 
 loadMoreBtn.addEventListener('click', async function () {
-  loaderContainer.style.display = 'block';
+  showLoader();
 
   try {
     const { data } = await axios.get(
       `https://pixabay.com/api/?key=42404284-d1db8811507a6ab98b0e3f497&q=${queryInput}&image_type=photo&orientation=horizontal&safeSearch=true&page=${currentPage}&per_page=15`
     );
+
     const { hits, totalHits } = data;
 
     if (hits.length > 0) {
@@ -79,19 +116,13 @@ loadMoreBtn.addEventListener('click', async function () {
       window.scrollBy({ top: halfPageHeight, behavior: 'smooth' });
 
       if (currentPage * 15 >= totalHits) {
-        endMessage.style.display = 'block';
-        iziToast.info({
-          title: 'Information',
-          message: `We're sorry, but you've reached the end of search results.`,
-          position: 'topRight',
-        });
+        showEndMessage();
+        hideLoadMoreButton();
+        showErrorMessage(`Sorry, there are no more images to load.`);
       }
     } else {
-      iziToast.info({
-        title: 'Information',
-        message: `Sorry, there are no more images to load.`,
-        position: 'topRight',
-      });
+      showErrorMessage(`Sorry, there are no more images to load.`);
+      hideLoadMoreButton();
     }
   } catch (error) {
     console.error('Error fetching images:', error);
@@ -101,6 +132,6 @@ loadMoreBtn.addEventListener('click', async function () {
       position: 'topRight',
     });
   } finally {
-    loaderContainer.style.display = 'none';
+    hideLoader();
   }
 });
