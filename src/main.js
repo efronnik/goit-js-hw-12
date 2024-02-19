@@ -1,6 +1,6 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
-import { fetchImages, GALLERY_LINK } from './js/pixabay-api';
+import axios from 'axios';
 import { createGallery } from './js/render-functions';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -21,10 +21,13 @@ searchForm.addEventListener('submit', async function (event) {
   loaderContainer.style.display = 'block';
 
   try {
-    const { hits } = await fetchImages(queryInput);
+    const response = await axios.get(
+      `https://api.unsplash.com/search/photos?query=${queryInput}&client_id=42444504-9067092ee8fdaf17c241a1e97`
+    );
+    const { results } = response.data;
 
-    if (hits.length > 0) {
-      const galleryHTML = hits.map(createGallery).join('');
+    if (results.length > 0) {
+      const galleryHTML = results.map(createGallery).join('');
       galleryContainer.innerHTML = galleryHTML;
 
       const lightbox = new SimpleLightbox(`.${GALLERY_LINK}`);

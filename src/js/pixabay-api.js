@@ -1,28 +1,24 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import axios from 'axios';
 
 const GALLERY_LINK = 'gallery-link';
 const BASE_URL = 'https://pixabay.com/api/';
 
 async function fetchImages(q) {
   const searchParams = new URLSearchParams({
-    key: '42404284-d1db8811507a6ab98b0e3f497',
+    key: '42444504-9067092ee8fdaf17c241a1e97',
     q,
     image_type: 'photo',
     orientation: 'horizontal',
     safeSearch: true,
   });
 
-  const PARAMS = `?${searchParams}`;
-  const url = BASE_URL + PARAMS;
+  const url = `${BASE_URL}?${searchParams}`;
 
   try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error('Failed to fetch images');
-    }
-    const data = await response.json();
-    return data;
+    const response = await axios.get(url);
+    return response.data;
   } catch (error) {
     iziToast.error({
       title: 'Error',
