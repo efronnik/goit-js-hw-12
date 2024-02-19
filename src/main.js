@@ -22,17 +22,22 @@ searchForm.addEventListener('submit', async function (event) {
 
   try {
     const response = await axios.get(
-      `https://api.unsplash.com/search/photos?query=${queryInput}&client_id=42404284-d1db8811507a6ab98b0e3f497`
+      `https://pixabay.com/api/?key=42404284-d1db8811507a6ab98b0e3f497&q=${queryInput}`
     );
-    const { results } = response.data;
 
-    if (results.length > 0) {
-      const galleryHTML = results.map(createGallery).join('');
+    if (
+      response.data.hits &&
+      Array.isArray(response.data.hits) &&
+      response.data.hits.length > 0
+    ) {
+      // Если свойство `hits` существует и это массив с данными, продолжаем обработку
+      const galleryHTML = response.data.hits.map(createGallery).join('');
       galleryContainer.innerHTML = galleryHTML;
 
       const lightbox = new SimpleLightbox(`.${GALLERY_LINK}`);
       lightbox.refresh();
     } else {
+      // Если свойство `hits` не существует или пусто, показываем сообщение о том, что результаты не найдены
       noResultsMessage.style.display = 'block';
     }
   } catch (error) {
