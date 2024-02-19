@@ -100,7 +100,9 @@ loadMoreBtn.addEventListener('click', async function () {
 
   try {
     const { data } = await axios.get(
-      `https://pixabay.com/api/?key=42404284-d1db8811507a6ab98b0e3f497&q=${queryInput}&image_type=photo&orientation=horizontal&safeSearch=true&page=${currentPage}&per_page=15`
+      `https://pixabay.com/api/?key=42404284-d1db8811507a6ab98b0e3f497&q=${queryInput}&image_type=photo&orientation=horizontal&safeSearch=true&page=${
+        currentPage + 1
+      }&per_page=15`
     );
 
     const { hits, totalHits } = data;
