@@ -1,6 +1,5 @@
 import iziToast from 'izitoast';
 import axios from 'axios';
-import { fetchImages, GALLERY_LINK } from './js/pixabay-api';
 import { createGallery } from './js/render-functions';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -73,7 +72,7 @@ searchForm.addEventListener('submit', async function (event) {
     if (hits.length > 0) {
       const galleryHTML = hits.map(createGallery).join('');
       galleryContainer.innerHTML = galleryHTML;
-      const lightbox = new SimpleLightbox(`.${GALLERY_LINK}`);
+      const lightbox = new SimpleLightbox('.gallery a');
       lightbox.refresh();
       showLoadMoreButton();
 
@@ -113,7 +112,7 @@ loadMoreBtn.addEventListener('click', async function () {
     if (hits.length > 0) {
       const galleryHTML = hits.map(createGallery).join('');
       galleryContainer.innerHTML += galleryHTML;
-      const lightbox = new SimpleLightbox(`.${GALLERY_LINK}`);
+      const lightbox = new SimpleLightbox('.gallery a');
       lightbox.refresh();
       currentPage++;
 
