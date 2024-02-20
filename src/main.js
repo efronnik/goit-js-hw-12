@@ -76,6 +76,11 @@ searchForm.addEventListener('submit', async function (event) {
       const lightbox = new SimpleLightbox(`.${GALLERY_LINK}`);
       lightbox.refresh();
       showLoadMoreButton();
+
+      window.scrollBy({
+        top: window.innerHeight,
+        behavior: 'smooth',
+      });
     } else {
       showErrorMessage(
         `Sorry, there are no images matching your search query. Please try again!`
@@ -100,9 +105,7 @@ loadMoreBtn.addEventListener('click', async function () {
 
   try {
     const { data } = await axios.get(
-      `https://pixabay.com/api/?key=42404284-d1db8811507a6ab98b0e3f497&q=${queryInput}&image_type=photo&orientation=horizontal&safeSearch=true&page=${
-        currentPage + 1
-      }&per_page=15`
+      `https://pixabay.com/api/?key=42404284-d1db8811507a6ab98b0e3f497&q=${queryInput}&image_type=photo&orientation=horizontal&safeSearch=true&page=${currentPage}&per_page=15`
     );
 
     const { hits, totalHits } = data;
@@ -114,8 +117,10 @@ loadMoreBtn.addEventListener('click', async function () {
       lightbox.refresh();
       currentPage++;
 
-      const halfPageHeight = window.innerHeight / 2;
-      window.scrollBy({ top: halfPageHeight, behavior: 'smooth' });
+      window.scrollBy({
+        top: window.innerHeight,
+        behavior: 'smooth',
+      });
 
       if (currentPage * 15 >= totalHits) {
         showEndMessage();
